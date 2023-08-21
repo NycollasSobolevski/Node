@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Cars = require('../models/Cars');
 const CarController = require("../controller/CarController")
 
 router
-    .get('/api/cars', CarController.GetAll )
-    .get('/api/cars/:id', CarController.GetById)
-    .post('/api/cars', CarController.Create )
-    .delete('/api/cars/:id', CarController.Delete )
-    .put('/api/cars/:id', CarController.Update )
+    .get('/', CarController.GetAll )
+    .get('/:id', CarController.GetById)
+    .post('/', CarController.Create )
+    .delete('/:id', CarController.Delete )
+    .put('/:id', CarController.Update )
 
 module.exports = router;
