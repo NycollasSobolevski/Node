@@ -9,12 +9,18 @@ class AuthController {
         let { email, password } = req.body;
 
         if(!email || !password)
-            return errp;
+            return res.status(401).send({ message: "Not all data provided" });
 
         try {
 
-            let user = User.find({ email })
-            let secret = process.env.SECRET
+            let user = await User.findOne({ email:email });
+            let secret = process.env.SECRET;
+
+            if( !user )
+                return res.status(401).send({ message: "User not found" });
+            if(!await bcrypt.compare(password, user.password))
+                return res.status(401).send({ message: "User not found" });
+            
             let token  = jwt.sign(
                 {
                     id: user._id
@@ -27,7 +33,7 @@ class AuthController {
             return res.status(200).send({ token: token });
         }
         catch (err) {
-            return res.status(500).send({ message: ("Something failed\n error: " + err)});
+            return res.status(500).send({ message: ("Something failed. " + err)});
         }
     };
 
